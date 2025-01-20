@@ -88,17 +88,20 @@ try:
             EC.presence_of_element_located((By.XPATH, "//a[contains(@href, 'ssr_report')]"))
         )
 
-        # Download the file
+        # Fetch the file URL
         download_button = driver.find_element(By.XPATH, "//a[contains(@href, 'ssr_report')]")
         file_url = download_button.get_attribute("href")
-        print(f"Downloading file from URL: {file_url}")
+        print(f"Fetching file from URL: {file_url}")
 
         # Download the file using requests
-        headers = {"User-Agent": "Mozilla/5.0"}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36",
+            "Accept": "application/pdf"
+        }
         file_response = requests.get(file_url, headers=headers)
 
         if file_response.status_code == 200:
-            file_name = os.path.join(download_dir, f"college_{index}.pdf")  # Change extension if needed
+            file_name = os.path.join(download_dir, f"college_{index}.pdf")
             with open(file_name, "wb") as file:
                 file.write(file_response.content)
             print(f"Downloaded file: {file_name}")
